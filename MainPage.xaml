@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
+using Microsoft.Phone.Controls;
+using Microsoft.Phone.Tasks;
+using System.Windows.Media.Imaging;
+using Microsoft.Phone.Controls.Maps;
+
+namespace MyMultiTalentedApplication
+{
+    public partial class MainPage : PhoneApplicationPage
+    {
+        // Constructor
+        CameraCaptureTask myCameraCaptureTask;
+        PhotoChooserTask myPhotoChooserTask;
+        SmsComposeTask mySmsComposeTask;
+        PhoneCallTask myPhoneCallTask;
+        BingMapsTask myBingMapsTask;
+
+        public MainPage()
+        {
+            InitializeComponent();
+            myCameraCaptureTask = new CameraCaptureTask();
+            myCameraCaptureTask.Completed += new EventHandler<PhotoResult>(myCameraCaptureTask_Completed);
+
+            myPhotoChooserTask = new PhotoChooserTask();
+            myPhotoChooserTask.Completed += new EventHandler<PhotoResult>(myPhotoChooserTask_Completed);
+
+            mySmsComposeTask = new SmsComposeTask();
+            myPhoneCallTask = new PhoneCallTask();
+            myBingMapsTask = new BingMapsTask();
+
+        }
+
+        private void cameraButton_Click(object sender, RoutedEventArgs e)
+        {
+            myCameraCaptureTask.Show();
+        }
+
+        private void myPhotoChooserTask_Completed(object sender, PhotoResult e)
+        {
+            BitmapImage myBitmapImage = new BitmapImage();
+            myBitmapImage.SetSource(e.ChosenPhoto);
+            previewImage.Source = myBitmapImage;
+        }
+
+        private void myCameraCaptureTask_Completed(object sender, PhotoResult e)
+        {
+            BitmapImage myBitmapImage = new BitmapImage();
+            myBitmapImage.SetSource(e.ChosenPhoto);
+            previewImage.Source = myBitmapImage;
+        }
+
+        private void albumButton_Click(object sender, RoutedEventArgs e)
+        {
+            myPhotoChooserTask.Show();
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            mySmsComposeTask.To = "0123456789";
+            mySmsComposeTask.Body = "Hello JSS";
+            mySmsComposeTask.Show();
+        }
+
+        private void button2_Click(object sender, RoutedEventArgs e)
+        {
+            myPhoneCallTask.PhoneNumber = "0123456789";
+            myPhoneCallTask.Show();
+        }
+
+        private void button3_Click(object sender, RoutedEventArgs e)
+        {
+            myBingMapsTask.SearchTerm = "Noida";
+            myBingMapsTask.Show();
+        }
+    }
+}
